@@ -95,7 +95,3 @@ COPY --from=builder /opt/blast/bin/blastn /opt/blast/bin
 COPY --from=builder /paarsnp /paarsnp
 
 ENV PATH /opt/blast/bin:$PATH
-
-WORKDIR /data
-
-ENTRYPOINT ["java","-jar","/paarsnp/paarsnp.jar"]
