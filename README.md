@@ -24,6 +24,7 @@ cd ~/path/to/my/genomes
 ```
 
 _Running the software_
+
 When the built Docker image is set as the container of a Nextflow process, the software can be ran as following
 ```
 java -jar /paarsnp/paarsnp.jar -i assembly.fa -s 1313
