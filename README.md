@@ -1,5 +1,7 @@
 # AMRsearch
 
+This ia fork of Pathogenwatch's AMRsearch. The original Docker container is provided as a Docker Executable Image, this fork provides a Docker enviornment, which is designed for integrating into the [GPS Unified Pipeline](https://github.com/HarryHung/gps-unified-pipeline) (a Nextflow Pipeline for processing Streptococcus pneumoniae sequencing raw reads).
+
 ## About
 
 AMRsearch is primary tool used by Pathogenwatch to genotype and infer AMR resistance phenotype from assembled microbial
@@ -13,27 +15,21 @@ Resistance can also be classed as "Intermediate" or "Resistant" (i.e "S/I/R").
 
 ## Quick start
 
-_Install & run with Docker in a terminal_
+_Install with Docker in a terminal_
 ```
 git clone --recursive --depth=1 -b main https://github.com/pathogenwatch-oss/amr-search
 cd amr-search
 docker build --rm --pull -t amrsearch .
 cd ~/path/to/my/genomes
-docker run --rm -v $PWD:/data amrsearch -i my_typhi_genome.fa -s 90370
 ```
 
-- `my_typhi_genome.fa`: FASTA file of (e.g.) Typhi assembly in local directory.
-- `93070`: species code for Typhi.
-
-### Internal devs only
-Note: 
-- Remove `--depth=1 -b main` from the clone command.
-- Between steps 2 & 3, Replace the git remote submodules URLS with the internal links.
+_Running the software_
+When the built Docker image is set as the container of a Nextflow process, the software can be ran as following
 ```
-git submodule set-url -- libraries/amr-libraries https://github.com/pathogenwatch/amr-libraries
-git submodule set-url -- libraries/amr-test-libraries https://github.com/pathogenwatch/amr-test-libraries
+java -jar /paarsnp/paarsnp.jar -i assembly.fa -s 1313
 ```
-
+- `assembly.fa`: FASTA file of (e.g.) _Streptococcus pneumoniae_ assembly in local directory.
+- `1313`: species code for _Streptococcus pneumoniae_.
 
 ## Useful Links
 
@@ -130,29 +126,23 @@ The build process runs two internal scripts.
 Usage
 -----
 
-To run AMRsearch on a single Salmonella _Typhi_ FASTA file in the local directory using the container. An output
+To run AMRsearch on a single Salmonella _Typhi_ FASTA file in the local directory. An output
 file `{assembly}_amrsearch.jsn` is created.
 
-`docker run --rm -v $PWD:/data amrsearch -i assembly.fa -s 90370`
+`java -jar /paarsnp/paarsnp.jar -i assembly.fa -s 90370`
 
 To run AMRsearch on all FASTA files in the local directory, with an output file for each one:
 
-`docker run --rm -v $PWD:/data amrsearch -i . -s 90370`
+`java -jar /paarsnp/paarsnp.jar -i . -s 90370`
 
 To provide multiple taxonomic levels (e.g. genus & species) use `-s` for each. AMRsearch will choose the most precise
 level it has a library for:
 
-`docker run --rm -v $PWD:/data amrsearch -i . -s 570 -s 573`
-
-If the FASTA folder is in a different directory you can mount it to docker as below.
-
-`docker run --rm -v /full/path/to/FASTAS/:/data amrsearch -i . -s 90370`
-
-NB "/data" is a protected folder for AMRsearch, and is normally used to mount the local drive.
+`java -jar /paarsnp/paarsnp.jar -i . -s 570 -s 573`
 
 To get the results to STDOUT rather than file:
 
-`docker run --rm -v $PWD:/data amrsearch -i assembly.fa -s 90370 -o`
+`java -jar /paarsnp/paarsnp.jar -i assembly.fa -s 90370 -o`
 
 NB not pretty printed, one record per line
 
