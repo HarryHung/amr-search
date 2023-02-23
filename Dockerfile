@@ -94,4 +94,10 @@ COPY --from=builder /opt/blast/bin/blastn /opt/blast/bin
 
 COPY --from=builder /paarsnp /paarsnp
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+ procps && \
+ apt-get autoclean && rm -rf /var/lib/apt/lists/*
+
 ENV PATH /opt/blast/bin:$PATH
+
+WORKDIR /data
